@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alcota.backend.usersapp.backendusersapp.models.entities.User;
 import com.alcota.backend.usersapp.backendusersapp.services.UserService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +63,19 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
 
+    }
+
+    @DeleteMapping("/id")
+    public ResponseEntity<?> remove(@PathVariable Long id) {
+        Optional<User> o = service.findById(id);
+        if (o.isPresent()) {
+        service.remove(id);
+
+        return ResponseEntity.noContent().build(); //204
+        }
+
+        return ResponseEntity.notFound().build();
+        
     }
 
 }
