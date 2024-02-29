@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import com.alcota.backend.usersapp.backendusersapp.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,15 +38,29 @@ public class UserController {
         Optional<User> userOptionl = service.findById(id);
 
         if(userOptionl.isPresent()){
-            return ResponseEntity.ok(userOptionl.orElseThrow())
+            return ResponseEntity.ok(userOptionl.orElseThrow());
         }
-        return ResponseEntity.notFound().build()
+        return ResponseEntity.notFound().build();
     }
     
     @PostMapping
 
     public ResponseEntity<?> create(@RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody User user, @PathVariable Long id) {
+        Optional<User> o = service.findById(id);
+        if (o.isPresent()) {
+            User userDb = o.orElseThrow();
+            userDb.setUsername(user.getUsername());
+            userDb.setEmail(user.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.save(userDb));
+
+        }
+        return ResponseEntity.notFound().build();
+
     }
 
 }
