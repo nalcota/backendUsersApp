@@ -55,10 +55,7 @@ public class UserController {
     public ResponseEntity<?> update(@RequestBody User user, @PathVariable Long id) {
         Optional<User> o = service.findById(id);
         if (o.isPresent()) {
-            User userDb = o.orElseThrow();
-            userDb.setUsername(user.getUsername());
-            userDb.setEmail(user.getEmail());
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.save(userDb));
+            return ResponseEntity.status(HttpStatus.CREATED).body(o.orElseThrow());
 
         }
         return ResponseEntity.notFound().build();
