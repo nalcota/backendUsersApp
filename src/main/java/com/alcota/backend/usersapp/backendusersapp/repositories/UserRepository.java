@@ -6,6 +6,5 @@ import com.alcota.backend.usersapp.backendusersapp.models.entities.User;
 
 public interface UserRepository
         extends CrudRepository<User, Long> {
-            
 
 }
